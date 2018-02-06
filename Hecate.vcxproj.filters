@@ -100,6 +100,9 @@
     <ClCompile Include="GeneratedFiles\Release\moc_View.cpp">
       <Filter>Generated Files\Release</Filter>
     </ClCompile>
+    <ClCompile Include="MakeBottle.cxx">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="ApplicationCommon.h">

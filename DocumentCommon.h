@@ -23,9 +23,10 @@ public:
 	ApplicationCommonWindow*       getApplication();
 	Handle(AIS_InteractiveContext) getContext();
 	void                           removeView( MDIWindow* );
-  void                           removeViews();
+	void                           removeViews();
 	int                            countOfWindow();
 	void                           fitAll();
+	void                           onMakeBottle();
 	
 protected:
   virtual MDIWindow*                   createNewMDIWindow();

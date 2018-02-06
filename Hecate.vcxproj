@@ -110,6 +110,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="MakeBottle.cxx" />
     <ClCompile Include="Material.cxx" />
     <ClCompile Include="MDIWindow.cxx" />
     <ClCompile Include="OcctWindow.cxx" />

@@ -21,8 +21,8 @@ QT_BEGIN_MOC_NAMESPACE
 QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_ApplicationCommonWindow_t {
-    QByteArrayData data[22];
-    char stringdata0[289];
+    QByteArrayData data[23];
+    char stringdata0[307];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -52,7 +52,8 @@ QT_MOC_LITERAL(17, 211, 22), // "windowsMenuAboutToShow"
 QT_MOC_LITERAL(18, 234, 20), // "windowsMenuActivated"
 QT_MOC_LITERAL(19, 255, 7), // "checked"
 QT_MOC_LITERAL(20, 263, 13), // "onSetMaterial"
-QT_MOC_LITERAL(21, 277, 11) // "theMaterial"
+QT_MOC_LITERAL(21, 277, 11), // "theMaterial"
+QT_MOC_LITERAL(22, 289, 17) // "onCreateOCCBottle"
 
     },
     "ApplicationCommonWindow\0onNewDoc\0"
@@ -62,7 +63,8 @@ QT_MOC_LITERAL(21, 277, 11) // "theMaterial"
     "onToolAction\0onCreateNewView\0"
     "onWindowActivated\0QWidget*\0w\0"
     "windowsMenuAboutToShow\0windowsMenuActivated\0"
-    "checked\0onSetMaterial\0theMaterial"
+    "checked\0onSetMaterial\0theMaterial\0"
+    "onCreateOCCBottle"
 };
 #undef QT_MOC_LITERAL
 
@@ -72,7 +74,7 @@ static const uint qt_meta_data_ApplicationCommonWindow[] = {
        7,       // revision
        0,       // classname
        0,    0, // classinfo
-      14,   14, // methods
+      15,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -80,20 +82,21 @@ static const uint qt_meta_data_ApplicationCommonWindow[] = {
        0,       // signalCount
 
  // slots: name, argc, parameters, tag, flags
-       1,    0,   84,    3, 0x0a /* Public */,
-       4,    0,   85,    3, 0x0a /* Public */,
-       5,    0,   86,    3, 0x0a /* Public */,
-       6,    1,   87,    3, 0x0a /* Public */,
-       8,    0,   90,    3, 0x0a /* Public */,
-       9,    0,   91,    3, 0x0a /* Public */,
-      10,    0,   92,    3, 0x0a /* Public */,
-      11,    0,   93,    3, 0x0a /* Public */,
-      12,    0,   94,    3, 0x0a /* Public */,
-      13,    0,   95,    3, 0x0a /* Public */,
-      14,    1,   96,    3, 0x0a /* Public */,
-      17,    0,   99,    3, 0x0a /* Public */,
-      18,    1,  100,    3, 0x0a /* Public */,
-      20,    1,  103,    3, 0x0a /* Public */,
+       1,    0,   89,    3, 0x0a /* Public */,
+       4,    0,   90,    3, 0x0a /* Public */,
+       5,    0,   91,    3, 0x0a /* Public */,
+       6,    1,   92,    3, 0x0a /* Public */,
+       8,    0,   95,    3, 0x0a /* Public */,
+       9,    0,   96,    3, 0x0a /* Public */,
+      10,    0,   97,    3, 0x0a /* Public */,
+      11,    0,   98,    3, 0x0a /* Public */,
+      12,    0,   99,    3, 0x0a /* Public */,
+      13,    0,  100,    3, 0x0a /* Public */,
+      14,    1,  101,    3, 0x0a /* Public */,
+      17,    0,  104,    3, 0x0a /* Public */,
+      18,    1,  105,    3, 0x0a /* Public */,
+      20,    1,  108,    3, 0x0a /* Public */,
+      22,    0,  111,    3, 0x0a /* Public */,
 
  // slots: parameters
     0x80000000 | 2,
@@ -110,6 +113,7 @@ static const uint qt_meta_data_ApplicationCommonWindow[] = {
     QMetaType::Void,
     QMetaType::Void, QMetaType::Bool,   19,
     QMetaType::Void, QMetaType::Int,   21,
+    QMetaType::Void,
 
        0        // eod
 };
@@ -135,6 +139,7 @@ void ApplicationCommonWindow::qt_static_metacall(QObject *_o, QMetaObject::Call 
         case 11: _t->windowsMenuAboutToShow(); break;
         case 12: _t->windowsMenuActivated((*reinterpret_cast< bool(*)>(_a[1]))); break;
         case 13: _t->onSetMaterial((*reinterpret_cast< int(*)>(_a[1]))); break;
+        case 14: _t->onCreateOCCBottle(); break;
         default: ;
         }
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
@@ -183,13 +188,13 @@ int ApplicationCommonWindow::qt_metacall(QMetaObject::Call _c, int _id, void **_
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 14)
+        if (_id < 15)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 14;
+        _id -= 15;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 14)
+        if (_id < 15)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 14;
+        _id -= 15;
     }
     return _id;
 }

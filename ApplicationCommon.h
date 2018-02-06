@@ -32,7 +32,7 @@ protected:
 	virtual DocumentCommon*          createNewDocument();
 	int&                             getNbDocument();
 
-	public slots:
+public slots:
 
 	DocumentCommon*                 onNewDoc();
 	void                            onCloseWindow();
@@ -48,6 +48,7 @@ protected:
 	void                            windowsMenuAboutToShow();
 	void                            windowsMenuActivated(bool checked/*int id*/);
 	void                            onSetMaterial(int theMaterial);
+	void							onCreateOCCBottle();
 
 protected:
 	virtual void                    resizeEvent(QResizeEvent*);

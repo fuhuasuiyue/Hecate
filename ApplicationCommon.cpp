@@ -646,19 +646,21 @@ void ApplicationCommonWindow::createRibbon()
 
 void ApplicationCommonWindow::createGroupClipboard(Qtitan::RibbonPage* page)
 {
-	if (Qtitan::RibbonGroup* groupClipboard = page->addGroup(QIcon(":/Resources/smallpaste.png"), tr("Clipboard")))
+	QString dir = getResourceDir() + QString("/res/");
+	QPixmap groupIcon = QPixmap(dir + QObject::tr("largeNewFile.png"));
+	if (Qtitan::RibbonGroup* groupClipboard = page->addGroup(groupIcon, tr("Clipboard")))
 	{
 		groupClipboard->setOptionButtonVisible();		
-		QPixmap newIcon, helpIcon, closeIcon;
-
-		QString dir = getResourceDir() + QString("/res/");
+		QPixmap newIcon, helpIcon, closeIcon, makeBottleIcon;
 
 		newIcon = QPixmap(dir + QObject::tr("largeNewFile.png"));
 		helpIcon = QPixmap(dir + QObject::tr("LargeHelp.png"));
 		closeIcon = QPixmap(dir + QObject::tr("largeClose.png"));
+		makeBottleIcon = QPixmap(dir + QObject::tr("SampleImportExport.png"));
 
 		QAction * fileNewAction, *fileCloseAction, *filePrefUseVBOAction,
-			*fileQuitAction, *viewToolAction, *viewStatusAction, *helpAboutAction;
+			*fileQuitAction, *viewToolAction, *viewStatusAction, *helpAboutAction,
+			*makeBottleAction;
 
 		fileNewAction = groupClipboard->addAction(newIcon, tr("&NewFile"), Qt::ToolButtonTextUnderIcon);
 		fileNewAction->setToolTip(QObject::tr("NewiFile"));
@@ -681,13 +683,17 @@ void ApplicationCommonWindow::createGroupClipboard(Qtitan::RibbonPage* page)
 		connect(helpAboutAction, SIGNAL(triggered()), this, SLOT(onAbout()));
 		myStdActions.insert(HelpAboutId, helpAboutAction);
 
-		//m_OsgOpenFile = groupClipboard->addAction(QIcon(":Resources/largeOpenFile.png"), tr("&OpenFile"), Qt::ToolButtonTextUnderIcon);
-		//connect(m_OsgOpenFile, SIGNAL(triggered()), this, SLOT(fileOpen()));
-		//m_OCCTest = groupClipboard->addAction(QIcon(":Resources/SampleImportExport.png"), tr("TestOcc"), Qt::ToolButtonTextUnderIcon);
-		//connect(m_OCCTest, SIGNAL(triggered()), this, SLOT(testShowOcc()));
+		makeBottleAction = groupClipboard->addAction(makeBottleIcon, tr("&MakeBottle"), Qt::ToolButtonTextUnderIcon);
+		connect(makeBottleAction, SIGNAL(triggered()), this, SLOT(onCreateOCCBottle()));
+
 	}
 }
 
-
+void ApplicationCommonWindow::onCreateOCCBottle()
+{
+	QMdiArea* ws = getWorkspace();
+	DocumentCommon* doc = (DocumentCommon*)(qobject_cast<MDIWindow*>(ws->activeSubWindow()->widget())->getDocument());
+	doc->onMakeBottle();
+}
 
 
