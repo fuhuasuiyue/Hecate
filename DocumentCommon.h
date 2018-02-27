@@ -9,6 +9,7 @@
 
 #include <AIS_InteractiveContext.hxx>
 #include <V3d_Viewer.hxx>
+#include "PartModel.h"
 
 class ApplicationCommonWindow;
 
@@ -27,19 +28,22 @@ public:
 	int                            countOfWindow();
 	void                           fitAll();
 	void                           onMakeBottle();
+	PartModel* addPartModel();
+	int getUniquePartModelID(int partID);
+	void updatePartList();
 	
 protected:
-  virtual MDIWindow*                   createNewMDIWindow();
+	virtual MDIWindow* createNewMDIWindow();
 
 signals:
-  void                           selectionChanged();
+	void                           selectionChanged();
 	void                           sendCloseDocument( DocumentCommon* );
 
 public slots:
 	virtual void                   onCloseView( MDIWindow* );
 	virtual void                   onCreateNewView();
 	virtual void                   onMaterial();
-  virtual void                   onMaterial( int );
+	virtual void                   onMaterial( int );
 	virtual void                   onDelete();
 
 	void                           onWireframe();
@@ -47,9 +51,10 @@ public slots:
 	void                           onColor();
 	void                           onTransparency();
 	void                           onTransparency( int );
+	void onImportSTPFile();
 
 private:
-  Handle(V3d_Viewer)             Viewer (const Standard_ExtString theName,
+	Handle(V3d_Viewer)             Viewer (const Standard_ExtString theName,
                                          const Standard_CString theDomain,
                                          const Standard_Real theViewSize,
                                          const V3d_TypeOfOrientation theViewProj,
@@ -62,7 +67,8 @@ protected:
 	Handle(V3d_Viewer)             myViewer;
 	Handle(AIS_InteractiveContext) myContext;
 	int                            myIndex;
-  int                            myNbViews;
+	int                            myNbViews;
+	QList<PartModel*> m_partModelList;
 };
 
 #endif

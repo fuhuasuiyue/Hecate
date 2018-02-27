@@ -103,6 +103,21 @@
     <ClCompile Include="MakeBottle.cxx">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="PartModel.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ImportOCAF.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="lzwmodeltree.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_lzwmodeltree.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_lzwmodeltree.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="ApplicationCommon.h">
@@ -123,9 +138,18 @@
     <CustomBuild Include="View.h">
       <Filter>Header Files</Filter>
     </CustomBuild>
+    <CustomBuild Include="lzwmodeltree.h">
+      <Filter>Header Files</Filter>
+    </CustomBuild>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="OcctWindow.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PartModel.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ImportOCAF.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

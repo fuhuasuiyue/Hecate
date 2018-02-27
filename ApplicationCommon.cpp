@@ -207,6 +207,19 @@ void ApplicationCommonWindow::onSelectionChanged()
 {
 	QMdiArea* ws = ApplicationCommonWindow::getWorkspace();
 	DocumentCommon* doc;
+	if (!ws || !(ws->activeSubWindow()) || !(ws->activeSubWindow()->widget()))
+	{
+		if (ws)
+		{
+			QMdiSubWindow* pTempWindow = ws->activeSubWindow();
+			if (pTempWindow)
+			{
+				QWidget* pTempWidget = ws->activeSubWindow()->widget();
+			}
+		}
+
+		return;
+	}
 
 	if (!qobject_cast<MDIWindow*>(ws->activeSubWindow()->widget()))
 		return;
@@ -651,16 +664,17 @@ void ApplicationCommonWindow::createGroupClipboard(Qtitan::RibbonPage* page)
 	if (Qtitan::RibbonGroup* groupClipboard = page->addGroup(groupIcon, tr("Clipboard")))
 	{
 		groupClipboard->setOptionButtonVisible();		
-		QPixmap newIcon, helpIcon, closeIcon, makeBottleIcon;
+		QPixmap newIcon, helpIcon, closeIcon, makeBottleIcon, importFileIcon;
 
 		newIcon = QPixmap(dir + QObject::tr("largeNewFile.png"));
 		helpIcon = QPixmap(dir + QObject::tr("LargeHelp.png"));
 		closeIcon = QPixmap(dir + QObject::tr("largeClose.png"));
 		makeBottleIcon = QPixmap(dir + QObject::tr("SampleImportExport.png"));
+		importFileIcon = QPixmap(dir + QObject::tr("import.png"));
 
 		QAction * fileNewAction, *fileCloseAction, *filePrefUseVBOAction,
 			*fileQuitAction, *viewToolAction, *viewStatusAction, *helpAboutAction,
-			*makeBottleAction;
+			*makeBottleAction, *importAction;
 
 		fileNewAction = groupClipboard->addAction(newIcon, tr("&NewFile"), Qt::ToolButtonTextUnderIcon);
 		fileNewAction->setToolTip(QObject::tr("NewiFile"));
@@ -686,6 +700,9 @@ void ApplicationCommonWindow::createGroupClipboard(Qtitan::RibbonPage* page)
 		makeBottleAction = groupClipboard->addAction(makeBottleIcon, tr("&MakeBottle"), Qt::ToolButtonTextUnderIcon);
 		connect(makeBottleAction, SIGNAL(triggered()), this, SLOT(onCreateOCCBottle()));
 
+		importAction = groupClipboard->addAction(importFileIcon, tr("&ImportFile"), Qt::ToolButtonTextUnderIcon);
+		connect(importAction, SIGNAL(triggered()), this, SLOT(onImportStepFile()));
+
 	}
 }
 
@@ -696,4 +713,14 @@ void ApplicationCommonWindow::onCreateOCCBottle()
 	doc->onMakeBottle();
 }
 
+void ApplicationCommonWindow::onImportStepFile()
+{
+	if (myDocuments.isEmpty())
+	{
+		onNewDoc();
+	}
+	QMdiArea* ws = getWorkspace();
+	DocumentCommon* doc = (DocumentCommon*)(qobject_cast<MDIWindow*>(ws->activeSubWindow()->widget())->getDocument());
+	doc->onImportSTPFile();
+}
 

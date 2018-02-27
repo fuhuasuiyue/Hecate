@@ -18,6 +18,15 @@
 
 #include <TopoDS_Shape.hxx>
 #include <AIS_Shape.hxx>
+#include "QFileDialog"
+#include "QFileInfo"
+#include "XCAFApp_Application.hxx"
+#include "IFSelect_ReturnStatus.hxx"
+#include "STEPCAFControl_Reader.hxx"
+#include <STEPControl_Reader.hxx>
+#include <XSControl_WorkSession.hxx>
+#include "ImportOCAF.h"
+#include <QMdiSubWindow>
 
 TopoDS_Shape
 MakeBottle(const Standard_Real myWidth, const Standard_Real myHeight, const Standard_Real myThickness);
@@ -66,6 +75,7 @@ myNbViews( 0 )
   myViewer->SetLightOn();
 
   myContext = new AIS_InteractiveContext (myViewer);
+  m_partModelList.clear();
 }
 
 DocumentCommon::~DocumentCommon()
@@ -180,6 +190,70 @@ void DocumentCommon::onMakeBottle()
 	QApplication::restoreOverrideCursor();
 }
 
+
+PartModel* DocumentCommon::addPartModel()
+{
+	PartModel* pAddModel = new PartModel;
+	int nPartID = 0;
+	if (!m_partModelList.isEmpty())
+	{
+		nPartID = getUniquePartModelID(nPartID);
+	}
+	pAddModel->setPartID(nPartID);
+	m_partModelList.append(pAddModel);
+	return pAddModel;
+
+}
+
+
+int DocumentCommon::getUniquePartModelID(int partID)
+{
+	if (m_partModelList.isEmpty())
+	{
+		return 0;
+	}
+	QList<PartModel*>::iterator itPart = m_partModelList.begin();
+	for (;itPart != m_partModelList.end(); ++itPart)
+	{
+		if ((*itPart)->getPartID() == partID)
+		{
+			partID++;
+		}
+	}
+
+	return partID;
+
+}
+
+
+void DocumentCommon::updatePartList()
+{
+	if (m_partModelList.isEmpty())
+	{
+		return;
+	}
+	for (int nCurrent = 0; nCurrent < m_partModelList.size(); ++nCurrent)
+	{
+		PartModel* pCurrentPart = m_partModelList.value(nCurrent);
+		TopoDS_Shape pCurrentShape = pCurrentPart->getPartShape();
+		//TopoDS_Shape tempCurrentShape = *pCurrentShape;
+
+		Handle(AIS_Shape) pAISCurrentShape = new AIS_Shape(pCurrentShape);
+		
+		getContext()->SetColor(pAISCurrentShape, pCurrentPart->getQuantityColor(), Standard_False);
+		getContext()->SetDisplayMode(pAISCurrentShape, 1, Standard_False);
+		getContext()->Display(pAISCurrentShape, Standard_False);
+		const Handle(AIS_InteractiveObject)& anIOAISBottle = pAISCurrentShape;
+		getContext()->SetSelected(anIOAISBottle, Standard_False);
+	}
+	QMdiArea* ws = myApp->getWorkspace();
+	MDIWindow* window = qobject_cast<MDIWindow*>(ws->activeSubWindow()->widget());
+	window->setModelTree(m_partModelList);
+	emit selectionChanged();
+	fitAll();
+
+}
+
 void DocumentCommon::onWireframe()
 {
     QApplication::setOverrideCursor( Qt::WaitCursor );
@@ -251,6 +325,44 @@ void DocumentCommon::onTransparency()
     DialogTransparency* aDialog = new DialogTransparency();
     connect( aDialog, SIGNAL( sendTransparencyChanged( int ) ), this, SLOT( onTransparency( int ) ) );
     aDialog->exec();
+}
+
+
+void DocumentCommon::onImportSTPFile()
+{
+	QMdiArea* ws = myApp->getWorkspace();
+	QMdiSubWindow* pTempMdiSubWin = ws->activeSubWindow();
+	MDIWindow* window = qobject_cast<MDIWindow*>(ws->activeSubWindow()->widget());
+
+	QString openFileName = QFileDialog::getOpenFileName(window, "ImportFile", "", "Import Files (*.stp *.step *.igs *iges)");
+	QFileInfo openFileInfo(openFileName);
+	ws->setActiveSubWindow(pTempMdiSubWin);
+
+	Handle(XCAFApp_Application) hApp = XCAFApp_Application::GetApplication();
+	Handle(TDocStd_Document) hDoc;
+	hApp->NewDocument(TCollection_ExtendedString("MDTV-CAF"), hDoc);
+	QApplication::setOverrideCursor(Qt::WaitCursor);
+	if (openFileInfo.suffix() == QString("stp") || openFileInfo.suffix() == QString("STEP"))
+	{
+		STEPCAFControl_Reader aReader;
+		aReader.SetColorMode(true);
+		aReader.SetNameMode(true);
+		aReader.SetLayerMode(true);
+		if (aReader.ReadFile((const char*)openFileName.toStdString().c_str()) != IFSelect_RetDone) {
+			//PyErr_SetString(Base::BaseExceptionFreeCADError, "cannot read STEP file");
+			return ;
+		}
+
+		//Handle_Message_ProgressIndicator pi = new Part::ProgressIndicator(100);
+		//aReader.Reader().WS()->MapReader()->SetProgress(pi);
+		//pi->NewScope(100, "Reading STEP file...");
+		//pi->Show();
+		aReader.Transfer(hDoc);
+	}
+	ImportOCAF ocaf(hDoc, this, openFileInfo.baseName().toStdString());
+	ocaf.loadShapes();
+	updatePartList();
+	QApplication::restoreOverrideCursor();
 }
 
 void DocumentCommon::onDelete()

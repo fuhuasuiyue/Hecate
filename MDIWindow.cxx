@@ -14,6 +14,7 @@
 #include <QFileInfo>
 #include <QMainWindow> 
 #include <QVBoxLayout>
+#include <QDockWidget>
 
 MDIWindow::MDIWindow(View* aView,
                      DocumentCommon* aDocument, 
@@ -23,6 +24,7 @@ MDIWindow::MDIWindow(View* aView,
 {
   myView = aView;
   myDocument = aDocument;
+  initDockWidget();
 }
 
 MDIWindow::MDIWindow( DocumentCommon* aDocument, QWidget* parent, Qt::WindowFlags wflags)
@@ -49,6 +51,7 @@ MDIWindow::MDIWindow( DocumentCommon* aDocument, QWidget* parent, Qt::WindowFlag
 
   resize( sizeHint() );
 
+  initDockWidget();
   setFocusPolicy( Qt::StrongFocus );
 }
 
@@ -98,7 +101,20 @@ void MDIWindow::createRaytraceActions()
   aList->at (View::ToolAntialiasingId)->setChecked (false);
 }
 
-void MDIWindow::onWindowActivated ()
+
+void MDIWindow::initDockWidget()
+{
+	QWidget *ut = new QWidget;
+	QDockWidget *dock = new QDockWidget(this);
+	dock->setTitleBarWidget(ut);
+	m_Modeltree = new lzwModelTree(this);
+	dock->setAllowedAreas(Qt::LeftDockWidgetArea);
+	dock->setWidget(m_Modeltree);
+	addDockWidget(Qt::LeftDockWidgetArea, dock);
+
+}
+
+void MDIWindow::onWindowActivated()
 {
   getDocument()->getApplication()->onSelectionChanged();
 }
@@ -146,6 +162,20 @@ void MDIWindow::dump()
       qApp->processEvents();
     }
   }
+}
+
+
+void MDIWindow::setModelTree(QList<PartModel*> partModelList)
+{
+	if (partModelList.isEmpty())
+	{
+		return;
+	}
+	for (int nCurrent = 0; nCurrent < partModelList.size(); ++nCurrent)
+	{
+		PartModel* pCurrentPart = partModelList.value(nCurrent);
+		m_Modeltree->addModelName(pCurrentPart->getPartName());
+	}
 }
 
 QSize MDIWindow::sizeHint() const

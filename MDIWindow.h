@@ -2,6 +2,8 @@
 #define MDIWINDOW_H
 
 #include <QMainWindow>
+#include "lzwmodeltree.h"
+#include "PartModel.h"
 
 class DocumentCommon;
 class View;
@@ -19,6 +21,7 @@ public:
 	void                       fitAll();
   virtual QSize              sizeHint() const;
   View*						getView();
+  void setModelTree(QList<PartModel*> partModelList);
 
 signals:
   void                       selectionChanged();
@@ -30,13 +33,16 @@ public slots:
   void                       onWindowActivated ();
   void                       dump();
 
+
 protected:
   void                       createViewActions();
   void                       createRaytraceActions();
+  void initDockWidget();
 
 protected:
   DocumentCommon*            myDocument;
   View*                      myView;
+  lzwModelTree *m_Modeltree;
 };
 
 #endif

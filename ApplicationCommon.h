@@ -49,6 +49,7 @@ public slots:
 	void                            windowsMenuActivated(bool checked/*int id*/);
 	void                            onSetMaterial(int theMaterial);
 	void							onCreateOCCBottle();
+	void onImportStepFile();
 
 protected:
 	virtual void                    resizeEvent(QResizeEvent*);
