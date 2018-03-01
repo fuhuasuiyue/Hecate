@@ -20,6 +20,9 @@
 
 #include <stdlib.h>
 #include "QSettings"
+#include "AIS_Shape.hxx"
+#include "Standard_Handle.hxx"
+#include <AIS_InteractiveObject.hxx>
 static ApplicationCommonWindow* stApp = 0;
 static QMdiArea* stWs = 0;
 

@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include "lzwmodeltree.h"
 #include "PartModel.h"
+#include "PartPropertyForm.h"
 
 class DocumentCommon;
 class View;
@@ -43,6 +44,7 @@ protected:
   DocumentCommon*            myDocument;
   View*                      myView;
   lzwModelTree *m_Modeltree;
+  PartPropertyForm* m_PartPropertyForm;
 };
 
 #endif

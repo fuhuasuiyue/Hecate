@@ -27,6 +27,8 @@
 #include <XSControl_WorkSession.hxx>
 #include "ImportOCAF.h"
 #include <QMdiSubWindow>
+#include "QMessageBox"
+#include <QDebug>
 
 TopoDS_Shape
 MakeBottle(const Standard_Real myWidth, const Standard_Real myHeight, const Standard_Real myThickness);
@@ -75,6 +77,30 @@ myNbViews( 0 )
   myViewer->SetLightOn();
 
   myContext = new AIS_InteractiveContext (myViewer);
+ // myContext->CloseAllContexts(true);
+
+ // myContext->OpenLocalContext(true, true, false, false);
+ // /* Ñ¡ÔñÄ£Ê½
+	//TopAbs_COMPOUND,
+	//TopAbs_COMPSOLID,
+	//TopAbs_SOLID,
+	//TopAbs_SHELL,
+	//TopAbs_FACE,
+	//TopAbs_WIRE,
+	//TopAbs_EDGE,
+	//TopAbs_VERTEX,
+	//TopAbs_SHAPE
+ // */
+ // //myContext->ActivateStandardMode(TopAbs_COMPOUND);
+ // //myContext->ActivateStandardMode(TopAbs_COMPSOLID);
+ // //myContext->ActivateStandardMode(TopAbs_SOLID);
+ // //myContext->ActivateStandardMode(TopAbs_SHELL);
+ // //myContext->ActivateStandardMode(TopAbs_FACE);
+ // //myContext->ActivateStandardMode(TopAbs_WIRE);
+ // //myContext->ActivateStandardMode(TopAbs_EDGE);
+ // //myContext->ActivateStandardMode(TopAbs_VERTEX);
+ // myContext->ActivateStandardMode(TopAbs_SHAPE);
+ // myContext->OpenLocalContext();
   m_partModelList.clear();
 }
 
@@ -111,6 +137,7 @@ void DocumentCommon::onCreateNewView()
            myApp->statusBar(), SLOT( showMessage( const QString&, int ) ) );
   connect( w, SIGNAL( sendCloseView( MDIWindow* ) ),
            this, SLOT( onCloseView( MDIWindow* ) ) );
+  connect(this, SIGNAL(selectionChanged()), this, SLOT(onSelectedModel()));
 
   QString aName;
   w->setWindowTitle( aName.sprintf( "Document %d:%d", myIndex, ++myNbViews ) );
@@ -206,6 +233,23 @@ PartModel* DocumentCommon::addPartModel()
 }
 
 
+PartModel* DocumentCommon::getPartModel(TopoDS_Shape selectedShape)
+{
+	if (m_partModelList.isEmpty())
+	{
+		return nullptr;
+	}
+	for (int nCurrentNum = 0; nCurrentNum<m_partModelList.size(); ++nCurrentNum)
+	{
+		PartModel* pModel = m_partModelList.at(nCurrentNum);
+		if (pModel->getPartShape().IsEqual(selectedShape))
+		{
+			return pModel;
+		}
+	}
+	return nullptr;
+}
+
 int DocumentCommon::getUniquePartModelID(int partID)
 {
 	if (m_partModelList.isEmpty())
@@ -279,7 +323,7 @@ void DocumentCommon::onColor()
     QColor aColor ;
     myContext->InitSelected();
     Handle(AIS_InteractiveObject) Current = myContext->SelectedInteractive() ;
-    if ( Current->HasColor () )
+	if ( Current->HasColor () )
     {
         Quantity_Color aShapeColor;
         myContext->Color( Current, aShapeColor );
@@ -363,6 +407,26 @@ void DocumentCommon::onImportSTPFile()
 	ocaf.loadShapes();
 	updatePartList();
 	QApplication::restoreOverrideCursor();
+}
+
+
+void DocumentCommon::onSelectedModel()
+{
+	myContext->InitSelected();
+	Handle(AIS_InteractiveObject) Current = myContext->SelectedInteractive();
+	// test
+	Handle(AIS_Shape) pCurrentShape = dynamic_cast<AIS_Shape*>(Current.get());
+	if (!pCurrentShape.IsNull())
+	{
+		TopoDS_Shape pDSShape = pCurrentShape->Shape();
+		PartModel* pCurrentModel = getPartModel(pDSShape);
+		if (pCurrentModel != nullptr)
+		{
+			qDebug() << pCurrentModel->getPartName();
+			qDebug() << pCurrentModel->getPartID();
+		}
+	}
+	// -test
 }
 
 void DocumentCommon::onDelete()

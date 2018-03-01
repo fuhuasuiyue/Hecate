@@ -118,6 +118,15 @@
     <ClCompile Include="GeneratedFiles\Release\moc_lzwmodeltree.cpp">
       <Filter>Generated Files\Release</Filter>
     </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_PartPropertyForm.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_PartPropertyForm.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="PartPropertyForm.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="ApplicationCommon.h">
@@ -139,6 +148,9 @@
       <Filter>Header Files</Filter>
     </CustomBuild>
     <CustomBuild Include="lzwmodeltree.h">
+      <Filter>Header Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="PartPropertyForm.h">
       <Filter>Header Files</Filter>
     </CustomBuild>
   </ItemGroup>

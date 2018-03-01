@@ -104,13 +104,25 @@ void MDIWindow::createRaytraceActions()
 
 void MDIWindow::initDockWidget()
 {
-	QWidget *ut = new QWidget;
-	QDockWidget *dock = new QDockWidget(this);
-	dock->setTitleBarWidget(ut);
+	//QWidget *ut = new QWidget(this);
+	QDockWidget *dock = new QDockWidget(QString().fromLocal8Bit("模型窗口"),this);
+
+	
+	//dock->setTitleBarWidget(ut);
 	m_Modeltree = new lzwModelTree(this);
-	dock->setAllowedAreas(Qt::LeftDockWidgetArea);
+	dock->setAllowedAreas(Qt::AllDockWidgetAreas);
+	dock->setFeatures(QDockWidget::AllDockWidgetFeatures);
 	dock->setWidget(m_Modeltree);
 	addDockWidget(Qt::LeftDockWidgetArea, dock);
+
+	QDockWidget *pPropertyDock = new QDockWidget(QString().fromLocal8Bit("属性窗口"),this);
+	m_PartPropertyForm = new PartPropertyForm(this);
+	m_PartPropertyForm->setMinimumWidth(200);
+	pPropertyDock->setAllowedAreas(Qt::AllDockWidgetAreas);
+	pPropertyDock->setFeatures(QDockWidget::AllDockWidgetFeatures/*| QDockWidget::DockWidgetVerticalTitleBar*/);
+	pPropertyDock->setWidget(m_PartPropertyForm);
+	addDockWidget(Qt::RightDockWidgetArea, pPropertyDock);
+	tabifyDockWidget(dock, pPropertyDock);
 
 }
 
@@ -174,7 +186,7 @@ void MDIWindow::setModelTree(QList<PartModel*> partModelList)
 	for (int nCurrent = 0; nCurrent < partModelList.size(); ++nCurrent)
 	{
 		PartModel* pCurrentPart = partModelList.value(nCurrent);
-		m_Modeltree->addModelName(pCurrentPart->getPartName());
+		m_Modeltree->addModelName(pCurrentPart);
 	}
 }
 

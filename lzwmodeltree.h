@@ -4,6 +4,7 @@
 #include <QTreeWidget>
 #include <QTreeWidgetItem>
 #include <QMouseEvent>
+#include "PartModel.h"
 
 class lzwModelTree : public QTreeWidget
 {
@@ -11,7 +12,7 @@ class lzwModelTree : public QTreeWidget
 public:
     explicit lzwModelTree(QWidget *parent = 0);
     virtual ~lzwModelTree();
-    void addModelName(QString str);
+    void addModel(PartModel* pPartModel);
 
 signals:
 

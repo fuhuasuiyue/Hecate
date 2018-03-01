@@ -29,6 +29,7 @@ public:
 	void                           fitAll();
 	void                           onMakeBottle();
 	PartModel* addPartModel();
+	PartModel* getPartModel(TopoDS_Shape selectedShape);
 	int getUniquePartModelID(int partID);
 	void updatePartList();
 	
@@ -52,7 +53,7 @@ public slots:
 	void                           onTransparency();
 	void                           onTransparency( int );
 	void onImportSTPFile();
-
+	void onSelectedModel();
 private:
 	Handle(V3d_Viewer)             Viewer (const Standard_ExtString theName,
                                          const Standard_CString theDomain,
